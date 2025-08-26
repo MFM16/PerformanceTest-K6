@@ -1,10 +1,10 @@
 import http from "k6/http";
 import { sleep, check } from "k6";
-import { generateRandomInteger } from "./helper/helper";
+import { generateRandomInteger } from "./helper/helper.js";
 
 export const options = {
-  vus: 10,
-  duration: "30s",
+  vus: 1,
+  duration: "5s",
 };
 
 export default function () {
@@ -15,14 +15,19 @@ export default function () {
     data: {
       year: 2020,
       price: 1000,
-      "CPU model": "Test new device",
-      "Hard disk size": "1 TB",
+      model: "Test new device",
+      size: "1 TB",
     },
   };
 
   const addObjectResponse = http.post(
     "https://api.restful-api.dev/objects",
-    JSON.stringify(data)
+    JSON.stringify(data),
+    {
+      headers: {
+        "Content-type": "application/json",
+      },
+    }
   );
 
   check(addObjectResponse, {

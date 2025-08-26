@@ -1,10 +1,10 @@
 import http from "k6/http";
-import { check } from "k6";
-import { generateRandomInteger } from "./helper/helper";
+import { check, sleep } from "k6";
+import { generateRandomInteger } from "./helper/helper.js";
 
 export const options = {
-  vus: 10,
-  duration: "30s",
+  vus: 1,
+  duration: "5s",
 };
 
 export default function () {

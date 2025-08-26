@@ -1,5 +1,5 @@
 import http from "k6/http";
-import { check, fail, sleep } from "k6";
+import { sleep, check } from "k6";
 import { generateRandomInteger } from "./helper/helper.js";
 
 export const options = {
@@ -41,32 +41,11 @@ export default function () {
 
   const id = addObjectResponse.json().id;
 
-  const newData = {
-    name: `Update Data ${new Date().getTime()}`,
-    data: {
-      year: 2019,
-      price: generateRandomInteger(500, 2000),
-      model: "Intel Core i9",
-      size: "1 TB",
-      color: "silver",
-    },
-  };
+  const deleteObject = http.del(`https://api.restful-api.dev/objects/${id}`);
 
-  console.info(newData);
-
-  const updateObject = http.put(
-    `https://api.restful-api.dev/objects/${id}`,
-    JSON.stringify(newData),
-    {
-      headers: {
-        "Content-type": "application/json",
-      },
-    }
-  );
-
-  check(updateObject, {
+  check(deleteObject, {
     "response status must 200": (response) => response.status === 200,
-    "updated at field must not null": (response) =>
-      response.json().updatedAt != null,
+    "response message must not null": (response) =>
+      response.json().message != null,
   });
 }
